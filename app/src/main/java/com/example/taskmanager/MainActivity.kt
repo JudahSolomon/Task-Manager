@@ -6,11 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Divider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -26,50 +29,78 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TaskManagerTheme {
+
+//
+                val systemUiController = rememberSystemUiController()
+                SideEffect {
+                        systemUiController.setStatusBarColor(
+                            color = SecondaryColor,
+                            darkIcons = false
+                        )
+//
+                    systemUiController.setStatusBarColor(color = SecondaryColor)
+                }
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    color = BackgroundColor, modifier = Modifier.fillMaxSize()
-                ) {
-//                    window.statusBarColor =
-//                        ContextCompat.getColor
-//                    (this,R.color.background)
 
-                    val systemUiController = rememberSystemUiController()
-                    SideEffect {
-//                        systemUiController.setStatusBarColor(
-//                            color = PrimaryColor,
-//                            darkIcons = false
-//                        )
+                Scaffold(content = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(BackgroundColor)
+                    ) {
 
-                        systemUiController.setStatusBarColor(color = PrimaryColor)
-                    }
 
-                    LazyColumn() {
-                        item {
-                            TaskPreview1()
+                        LazyColumn() {
+                            item {
+                                TaskPreview1()
 
-                            Divider(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(2.dp)
-                                    .padding(horizontal = 40.dp)
-                                    .background(SubTextColor)
-                            )
+                                Divider(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(2.dp)
+                                        .padding(horizontal = 40.dp)
+                                        .background(SubTextColor)
+                                )
 
-                            TaskPreview2()
+                                TaskPreview2()
 
-                            Divider(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(2.dp)
-                                    .padding(horizontal = 40.dp)
-                                    .background(Color.Black)
-                            )
+                                Divider(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(2.dp)
+                                        .padding(horizontal = 40.dp)
+                                        .background(Color.Black)
+                                )
 
-                            TaskPreview3()
+                                TaskPreview3()
+                            }
                         }
                     }
-                }
+                },
+                    floatingActionButton = {
+                        FloatingButton()
+
+
+                    }, topBar = {
+                        TopAppBar(
+                            title = {
+                                Text(text = "Task Manager App")
+                            },
+                            navigationIcon = {
+                                Icon(
+                                    Icons.Default.Menu,
+                                    contentDescription = null,
+                                    modifier = Modifier.padding(start = 16.dp)
+                                )
+
+                            },
+                            backgroundColor = PrimaryColor,
+                            contentColor = Color.White,
+                            elevation = AppBarDefaults.TopAppBarElevation
+                        )
+                    })
+
+
             }
         }
     }
@@ -85,6 +116,7 @@ fun TaskPreview1() {
                 .fillMaxSize()
                 .background(BackgroundColor)
         ) {
+
             HeaderSection()
             TaskCard(
                 60f, "4/6 ",
@@ -127,6 +159,7 @@ fun TaskPreview1() {
                             " Remember consistency is the Key"
                 )
             }
+
         }
 
     }
@@ -243,10 +276,49 @@ fun TaskPreview3() {
             }
         }
 
+
     }
 }
 
+// floating Action Button
 
+@Preview(showBackground = true)
+@Composable
+fun FloatingButton(
+
+) {
+
+    val showDialog = remember {
+        mutableSetOf(false)
+    }
+    Column(
+        modifier = Modifier
+            .padding(10.dp)
+            .size(width = 200.dp, height = 50.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.End
+    ) {
+
+
+        ExtendedFloatingActionButton(
+            text = {
+                Text(
+                    text = "Add Task",
+                    fontFamily = Poppins,
+                    fontWeight = FontWeight.Bold,
+                )
+            },
+            onClick = {
+//                    CustomDialog(true)
+
+                // open the AddTask dialog box
+            },
+            backgroundColor = SecondaryColor,
+            contentColor = Color.White,
+            icon = { Icon(Icons.Filled.Add, "") })
+
+    }
+}
 
 
 

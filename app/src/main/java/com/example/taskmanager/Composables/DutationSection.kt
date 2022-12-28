@@ -66,7 +66,7 @@ fun DurationSection(
                 fontFamily = Poppins,
 
                 )
-            Spacer(modifier = Modifier.width(110.dp))
+            Spacer(modifier = Modifier.width(80.dp))
 
             Box(
                 modifier = Modifier

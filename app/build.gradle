@@ -61,6 +61,8 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
+    implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
+
 
 // status bar changer
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.27.0"

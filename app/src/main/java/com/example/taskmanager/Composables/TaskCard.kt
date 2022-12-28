@@ -3,6 +3,7 @@ package com.example.taskmanager.Composables
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -101,29 +102,7 @@ fun TaskCard(
 
                 )
 
-                Button(
-                    onClick = { },
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 0.dp,
-                            color = Color.Transparent,
-                            shape = RoundedCornerShape(20.dp),
-                        ),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryColor),
-                    contentPadding = PaddingValues(vertical = 0.dp, horizontal = 16.dp)
-                ) {
-                    Text(
-                        text = "Daily Task",
-                        fontSize = 10.sp,
-                        color = Color.White,
-                        fontFamily = Poppins,
-                        modifier = Modifier
-                            .align(alignment = Alignment.CenterVertically),
-
-                        )
-
-                }
+               ClickButton(text = "Edit Task")
 
             }
 
@@ -177,5 +156,41 @@ fun TaskCard(
         }
 
 
+    }
+}
+
+@Composable
+fun ClickButton(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = {
+//                            onConfirm()
+        },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = PrimaryColor,
+            contentColor = Color.White
+        ),
+        modifier = Modifier,
+        shape = CircleShape
+    ) {
+        Row (horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.size(width = 100.dp, height = 25.dp)){
+            Icon(
+                painter = painterResource(id = R.drawable.pen),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(20.dp)
+                    .padding(end =  3.dp)
+            )
+            Text(
+                text = text,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center,
+                fontFamily = Poppins,
+            )
+        }
     }
 }
