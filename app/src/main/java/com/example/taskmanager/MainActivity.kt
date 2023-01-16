@@ -1,5 +1,6 @@
 package com.example.taskmanager
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,8 +25,10 @@ import androidx.compose.ui.unit.sp
 import com.example.taskmanager.Composables.*
 import com.example.taskmanager.ui.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -33,72 +37,119 @@ class MainActivity : ComponentActivity() {
 //
                 val systemUiController = rememberSystemUiController()
                 SideEffect {
-                        systemUiController.setStatusBarColor(
-                            color = SecondaryColor,
-                            darkIcons = false
-                        )
+                    systemUiController.setStatusBarColor(
+                        color = SecondaryColor,
+                        darkIcons = false
+                    )
 //
                     systemUiController.setStatusBarColor(color = SecondaryColor)
                 }
                 // A surface container using the 'background' color from the theme
 
-                Scaffold(content = {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(BackgroundColor)
-                    ) {
+                val scaffoldState = rememberScaffoldState()
+                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                val coroutineScope = rememberCoroutineScope()
+
+                ModalDrawer(
+                    drawerContent = {
+                        DrawerNavigationUI()
+                    },
+                    drawerState = drawerState
+                )
+                {
+                    Scaffold(
+                        content = {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(BackgroundColor)
+                            ) {
 
 
-                        LazyColumn() {
-                            item {
-                                TaskPreview1()
+                                LazyColumn() {
+                                    item {
+                                        TaskPreview1()
 
-                                Divider(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(2.dp)
-                                        .padding(horizontal = 40.dp)
-                                        .background(SubTextColor)
-                                )
+                                        Divider(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(2.dp)
+                                                .padding(horizontal = 40.dp)
+                                                .background(SubTextColor)
+                                        )
 
-                                TaskPreview2()
+                                        TaskPreview2()
 
-                                Divider(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(2.dp)
-                                        .padding(horizontal = 40.dp)
-                                        .background(Color.Black)
-                                )
+                                        Divider(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(2.dp)
+                                                .padding(horizontal = 40.dp)
+                                                .background(Color.Black)
+                                        )
 
-                                TaskPreview3()
+                                        TaskPreview3()
+                                    }
+                                }
                             }
-                        }
-                    }
-                },
-                    floatingActionButton = {
-                        FloatingButton()
+                        },
+                        floatingActionButton = {
+                            FloatingButton()
 
 
-                    }, topBar = {
-                        TopAppBar(
-                            title = {
-                                Text(text = "Task Manager App")
-                            },
-                            navigationIcon = {
-                                Icon(
-                                    Icons.Default.Menu,
-                                    contentDescription = null,
-                                    modifier = Modifier.padding(start = 16.dp)
-                                )
+                        },
+                        topBar = {
+                            coroutineScope.launch {
+                                scaffoldState.drawerState
+                            }
+                            TopAppBar(
+                                title = {
+                                    Text(text = "Task Manager App")
+                                },
+                                navigationIcon = {
 
-                            },
-                            backgroundColor = PrimaryColor,
-                            contentColor = Color.White,
-                            elevation = AppBarDefaults.TopAppBarElevation
-                        )
-                    })
+                                    IconButton(onClick = {
+
+                                        // opening and closing the drawerNav in a coroutine scope
+                                        if (drawerState.isClosed) {
+
+                                            coroutineScope.launch {
+                                                drawerState.open()
+                                            }
+
+                                        } else {
+
+                                            coroutineScope.launch {
+                                                scaffoldState.drawerState.close()
+                                            }
+
+                                        }
+
+
+                                    }) {
+
+
+                                        Icon(
+                                            Icons.Default.Menu,
+                                            contentDescription = null,
+                                            modifier = Modifier
+                                                .padding(start = 16.dp)
+
+
+                                        )
+                                    }
+
+                                },
+                                backgroundColor = PrimaryColor,
+                                contentColor = Color.White,
+                                elevation = AppBarDefaults.TopAppBarElevation
+                            )
+                        },
+                        drawerContent = {
+                            DrawerNavigationUI()
+                        },
+                    )
+                }
 
 
             }

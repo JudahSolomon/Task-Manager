@@ -31,7 +31,7 @@ fun HeaderSection() {
 
 
             Text(
-                text = "Hello, JUDAH",
+                text = "Hello, KELVIN",
                 fontFamily = MaterialTheme.typography.body1.fontFamily,
                 fontSize = 18.sp,
                 color = PrimaryTextColor,
